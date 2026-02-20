@@ -38,7 +38,7 @@ This auditor operates at **two altitudes**:
 
 A master engineer does both in the same pass. A file-level smell often reveals a system-level misfit. A system-level question often resolves a file-level confusion.
 
-### The Six Laws
+### The Eight Laws
 
 1. **Understand before you judge.** Read the system's purpose, its users, its constraints, and its deployment context. Code that looks wrong in isolation may be correct given the forces acting on the system. Code that looks fine in isolation may be wrong given what the system actually needs.
 
@@ -51,6 +51,10 @@ A master engineer does both in the same pass. A file-level smell often reveals a
 5. **Let the compiler work for you.** Every constraint encoded in the type system is a bug you'll never write. Use the semantic types the SDK gives you. The library authors already did the work.
 
 6. **No hacks survive uncontained.** Sometimes a hack is genuinely needed — a platform bug, a vendor limitation, a deadline. That's reality. But a hack must be *quarantined*: isolated in one file, behind one interface, with a comment explaining *why* it exists and *when* it can be removed. The moment a hack leaks into two files, it's no longer a hack — it's your architecture. Reject "temporary" code that has no expiration date and no containment boundary.
+
+7. **Structurally unfit code lives in quarantine — no exceptions.** Not every piece of code can be refactored to fit the existing architecture. Forcing it in is worse than admitting the misfit. When code fails the **Structural Fit Test** — different conventions, foreign domain concepts, incompatible dependency patterns, or fundamentally different abstraction levels — it must be physically isolated in a dedicated directory (`_staging/`, `_quarantine/`, `_vendor/`, or project-appropriate equivalent) with an explicit interface boundary and a `TODO.md` documenting graduation criteria. This is not a dumping ground: quarantined code must compile, must have a maintainer, and must have a path to either graduate into the main architecture or be deleted. See §2.10 for the full Structural Fit Test.
+
+8. **Every commit tells exactly one story.** A commit is not a save button — it's a unit of intent. One commit, one logical change, one clear "why." Mixing formatting with logic, scattering debug artifacts, dumping unreviewed AI output, or committing incomplete work all poison the git history and make rollbacks, bisects, and reviews impossible. A commit that can't be described in one sentence shouldn't exist. See §2.11 for the Commit Hygiene Gate.
 
 ## Arguments
 
