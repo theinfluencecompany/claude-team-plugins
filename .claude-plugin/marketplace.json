@@ -1,12 +1,15 @@
 {
   "name": "tic",
   "version": "1.0.0",
+  "owner": {
+    "name": "The Influence Company"
+  },
   "plugins": [
     {
       "name": "fried-team",
       "version": "2.0.0",
       "description": "Fried team stack skills and quality hooks",
-      "source": "./"
+      "source": "./plugins/fried-team"
     }
   ]
 }
