@@ -1,5 +1,5 @@
 {
   "name": "fried-team",
-  "description": "Shared skills for the Fried team — code audit, deploy patterns, and quality enforcement",
-  "version": "1.0.0"
+  "description": "Fried team stack skills — Hono, Cloudflare Workers, Convex, Langfuse, code audit, and quality hooks",
+  "version": "2.0.0"
 }
