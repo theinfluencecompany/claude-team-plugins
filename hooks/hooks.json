@@ -1,24 +1,11 @@
 {
   "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "jq -r '.tool_input.file_path // empty' | xargs -I{} npx biome check --write {} 2>/dev/null",
-            "async": true,
-            "timeout": 30
-          }
-        ]
-      }
-    ],
     "Stop": [
       {
         "hooks": [
           {
             "type": "agent",
-            "prompt": "Run `git diff --name-only` to find changed files. If fewer than 5 files changed, respond with just 'No audit needed' and stop immediately. If 5+ files were changed, read each changed file and perform a quick code audit. Check for: (1) `any` types, (2) `as` type assertions, (3) empty `catch {}`, (4) `|| true` without comments, (5) unused imports, (6) string interpolation in shell commands, (7) secrets in logs, (8) copy-pasted code. Report findings by severity: BUG > SECURITY > SMELL > STYLE. Max 10 findings.",
+            "prompt": "Run `git diff --name-only` to find changed files. If fewer than 5 files changed, respond 'No audit needed' and stop. If 5+ changed, read each and audit for: `any` types, `as` casts, empty `catch {}`, `|| true` without comments, unused imports, shell string interpolation, secrets in logs, copy-pasted code. Max 10 findings by severity: BUG > SECURITY > SMELL > STYLE.",
             "timeout": 120
           }
         ]

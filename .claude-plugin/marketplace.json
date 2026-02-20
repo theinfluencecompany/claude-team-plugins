@@ -4,12 +4,9 @@
   "plugins": [
     {
       "name": "fried-team",
-      "version": "1.0.0",
-      "description": "Code audit skill + quality hooks for the Fried team",
-      "source": {
-        "source": "github",
-        "repo": "theinfluencecompany/claude-team-plugins"
-      }
+      "version": "2.0.0",
+      "description": "Fried team stack skills and quality hooks",
+      "source": "./"
     }
   ]
 }
