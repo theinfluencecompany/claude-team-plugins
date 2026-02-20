@@ -1,0 +1,15 @@
+{
+  "name": "tic-plugins",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "fried-team",
+      "version": "1.0.0",
+      "description": "Code audit skill + quality hooks for the Fried team",
+      "source": {
+        "source": "github",
+        "repo": "tic/claude-team-plugins"
+      }
+    }
+  ]
+}
