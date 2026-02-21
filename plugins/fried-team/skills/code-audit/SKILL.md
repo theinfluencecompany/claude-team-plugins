@@ -157,7 +157,7 @@ Run every item. Skip nothing.
 - [ ] **Declarative over imperative** — config array + generic loop, not N if/else blocks
 - [ ] **Cross-layer naming consistency** — same field name from database to API to client
 
-### 2.4 Abstraction Quality
+### 2.4 Abstraction Quality & Deabstraction
 
 > "Perfection is achieved not when there is nothing more to add, but when there
 > is nothing left to take away." — Saint-Exupéry
@@ -167,6 +167,11 @@ Run every item. Skip nothing.
 - [ ] **No premature abstraction** — three similar lines > one helper used once
 - [ ] **Generics stay readable** — if a signature needs a comment to explain, simplify it
 - [ ] **Thin layers** — each function does one thing. Can't name it in 3 words? Too much.
+- [ ] **No wrong abstractions** — accumulated boolean flags or mode parameters signal a shared function serving divergent callers. Inline it, then re-extract correctly.
+- [ ] **No pass-through delegation** — if layer B just calls layer C with no transformation, validation, or error handling, inline B. Call-depth hell is a code smell.
+- [ ] **No unnecessary middleware** — each middleware layer must transform, validate, or handle errors. Pass-throughs are dead weight.
+
+See **[deabstraction.md](./references/deabstraction.md)** for the full paradigm catalog and decision framework.
 
 ### 2.5 Hack Containment & Code Hygiene
 
@@ -232,9 +237,10 @@ Carmack's approach: sometimes the elegant implementation is just a function — 
 7. **Read dependency types** — `.d.ts` for every import. Know what's already derived.
 8. **Grep** for red flags: `any`, `as `, `|| true`, `catch {}`, `process.env`, `// TODO`, `// HACK`, `// temporary`, `// for now`, duplicate literals
 9. **Trace the type graph** — for each type: where does it originate? Derived or hand-written? Crosses a trust boundary?
-10. **List findings** by severity: BUG > SECURITY > SMELL > STYLE
-11. **Apply fixes** (unless `--report`) — one logical change per edit
-12. **Verify** — re-read the file, run the project's linter, confirm zero new issues
+10. **Trace the call graph** — for each layer: does it transform, validate, or handle errors? If not, it is a candidate for inlining. Consult [deabstraction.md](./references/deabstraction.md) §Decision Framework.
+11. **List findings** by severity: BUG > SECURITY > SMELL > STYLE
+12. **Apply fixes** (unless `--report`) — one logical change per edit
+13. **Verify** — re-read the file, run the project's linter, confirm zero new issues
 
 ## Severity Guide
 
@@ -246,6 +252,7 @@ Carmack's approach: sometimes the elegant implementation is just a function — 
 | **SMELL** | Works but fragile/unmaintainable | Fix in this pass |
 | **STYLE** | Cosmetic, doesn't affect behavior | Fix if touching the line anyway |
 
-## Anti-Patterns
+## References
 
-See **[anti-patterns.md](./references/anti-patterns.md)** for the full catalog with generic examples.
+- **[anti-patterns.md](./references/anti-patterns.md)** — Full catalog of code-level anti-patterns with before/after examples organized by audit checklist section.
+- **[deabstraction.md](./references/deabstraction.md)** — Paradigms for removing unnecessary abstractions, intermediaries, and call-depth hell. Includes decision framework for when to remove vs. keep an abstraction, and the step-by-step deabstraction sequence.

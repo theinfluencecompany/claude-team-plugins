@@ -289,6 +289,78 @@ const proc = createProcessor<OnlyOneType>("default");
 const proc = new OnlyOneType();
 ```
 
+### The Wrong Abstraction — accumulated conditionals
+```typescript
+// BAD — shared function bent to serve divergent callers
+function formatOutput(
+  data: Data,
+  type: "csv" | "json" | "xml",
+  includeHeader = false,
+  legacy = false,
+  v2 = false
+) {
+  let result = legacy ? data.toLegacyString() : data.toString();
+  if (includeHeader && !v2) result = `HEADER\n${result}`;
+  if (v2) result = transformV2(result);
+  switch (type) {
+    case "csv": return toCsv(result);
+    case "json": return toJson(result);
+    case "xml": return toXml(result, { legacy });
+  }
+}
+
+// GOOD — inline back to callers, each with clear intent
+function formatReport(data: Data) {
+  return toCsv(`HEADER\n${data.toString()}`);
+}
+function formatApiResponse(data: Data) {
+  return toJson(transformV2(data.toString()));
+}
+function formatLegacyExport(data: Data) {
+  return toXml(data.toLegacyString(), { legacy: true });
+}
+```
+**Why**: Boolean flags and mode parameters signal the Wrong Abstraction (Sandi Metz). Inlining back to callers reveals that these were three different operations forced into one. See [deabstraction.md](./deabstraction.md) for the full removal sequence.
+
+### Unnecessary delegation chain (call-depth hell)
+```typescript
+// BAD — A calls B calls C calls D. B and C add nothing.
+class UserController {
+  getUser(id: string) { return this.userService.getUser(id); }
+}
+class UserService {
+  getUser(id: string) { return this.userRepo.getUser(id); }
+}
+class UserRepo {
+  getUser(id: string) { return db.query<User>("SELECT * FROM users WHERE id = ?", id); }
+}
+
+// GOOD — inline the layers that add no logic
+class UserController {
+  getUser(id: string) {
+    return db.query<User>("SELECT * FROM users WHERE id = ?", id);
+  }
+}
+```
+**Why**: Each pass-through layer is cognitive overhead. If a layer adds no validation, no transformation, and no error handling, it is pure indirection. Inline it. See [deabstraction.md](./deabstraction.md) §Inline Function.
+
+### Pass-through middleware that does nothing
+```typescript
+// BAD — middleware that logs... and nothing else relevant
+app.use(async (c, next) => {
+  console.log("request received");
+  await next();
+});
+app.use(async (c, next) => {
+  // "auth middleware" that was disabled months ago
+  await next();
+});
+
+// GOOD — remove empty middleware, combine trivial ones into the framework's built-in logger
+app.use(logger());
+```
+**Why**: Middleware that neither transforms nor validates is dead weight. Each no-op layer obscures the actual request flow. See [deabstraction.md](./deabstraction.md) §Unnecessary Middleware.
+
 ---
 
 ## 5. Hack Containment & Code Hygiene
