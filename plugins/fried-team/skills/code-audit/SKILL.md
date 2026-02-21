@@ -256,3 +256,4 @@ Carmack's approach: sometimes the elegant implementation is just a function — 
 
 - **[anti-patterns.md](./references/anti-patterns.md)** — Full catalog of code-level anti-patterns with before/after examples organized by audit checklist section.
 - **[deabstraction.md](./references/deabstraction.md)** — Paradigms for removing unnecessary abstractions, intermediaries, and call-depth hell. Includes decision framework for when to remove vs. keep an abstraction, and the step-by-step deabstraction sequence.
+- **[type-derivation.md](./references/type-derivation.md)** — Comprehensive reference on TypeScript type reuse paradigms: single source of truth, type derivation from SDKs/schemas/databases/APIs, advanced utility types, branded types, and anti-patterns. Supports audit sections 2.1 (End-to-End Type Flow), 2.2 (Trust Boundaries), and 2.3 (Single Source of Truth).
