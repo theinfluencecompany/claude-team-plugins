@@ -1,0 +1,9 @@
+{
+  "source": "vercel-labs/agent-skills",
+  "skill": "vercel-react-native-skills",
+  "sourceUrl": "https://github.com/vercel-labs/agent-skills",
+  "skillPath": "skills/vercel-react-native-skills",
+  "installCmd": "npx skills add vercel-labs/agent-skills@vercel-react-native-skills -g -y",
+  "vendoredAt": "2026-02-23",
+  "note": "To update: npx skills add vercel-labs/agent-skills@vercel-react-native-skills -g -y && cp -r ~/.agents/skills/vercel-react-native-skills/ plugins/fried-team/skills/"
+}
